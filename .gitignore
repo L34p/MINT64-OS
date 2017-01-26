@@ -1,3 +1,9 @@
+# MINT64 OS disk image
+Disk.img
+
+# Binary
+.bin
+
 # Object files
 *.o
 *.ko
