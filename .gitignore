@@ -2,7 +2,7 @@
 Disk.img
 
 # Binary
-.bin
+*.bin
 
 # Object files
 *.o
