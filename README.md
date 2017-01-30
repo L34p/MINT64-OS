@@ -14,6 +14,14 @@ brew install qemu
 
 Setup cross compile environment. - [wiki](https://github.com/L34p/MINT64-OS/wiki/Cross-compiler-setup-on-macOS)
 
+## Build and Run
+```bash
+git clone https://github.com/L34p/MINT64-OS.git
+cd MINT64-OS.git
+make
+./run.sh
+```
+
 ## Progress
 - [x] 1. 시작하기 전에
 - [x] 2. OS 개발 환경을 구축하자
