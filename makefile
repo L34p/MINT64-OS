@@ -24,13 +24,13 @@ Kernel32:
 
 ImageMaker:
 	@echo
-	@echo ============== Build ImageMaker utility =============
+	@echo =========== Build ImageMaker utility ==========
 	@echo
 	
 	make -C 04.Utility/00.ImageMaker
 		
 	@echo
-	@echo ================== Build Complete ===================
+	@echo =============== Build Complete ================
 	@echo
 
 Disk.img: 00.BootLoader/BootLoader.bin 01.Kernel32/Kernel32.bin ImageMaker

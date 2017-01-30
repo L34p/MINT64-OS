@@ -1,9 +1,14 @@
 #include "Types.h"
+#include "Page.h"
 
 void kPrintString(int iX, int iY, const char* pcString);
 BOOL kInitializeKernel64Area(void);
 BOOL kIsMemoryEnough(void);
 
+/* 
+ * 32-bit protected mode C language kernel entry point.
+ * This function must be located at the first.
+ */
 void Main(void)
 {
   kPrintString(0, 3, "C Language Kernel Start.....................[PASS]");
@@ -26,6 +31,10 @@ void Main(void)
   }
   else 
     kPrintString(45, 5, "PASS");
+
+  kPrintString(0, 6, "IA-32e Page Tables Initialize...............[    ]");
+  kInitializePageTables();
+  kPrintString(45, 6, "PASS");
 
   while (1);
 }
@@ -81,4 +90,6 @@ BOOL kIsMemoryEnough(void)
   }
 
   return TRUE;
-}
+} 
+
+

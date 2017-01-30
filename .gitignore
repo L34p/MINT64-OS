@@ -1,6 +1,9 @@
 # MINT64 OS disk image
 Disk.img
 
+# ctags
+tags
+
 # Binary
 *.bin
 
