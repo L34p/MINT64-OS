@@ -17,7 +17,7 @@ Setup cross compile environment. - [wiki](https://github.com/L34p/MINT64-OS/wiki
 ## Build and Run
 ```bash
 git clone https://github.com/L34p/MINT64-OS.git
-cd MINT64-OS.git
+cd MINT64-OS
 make
 ./run.sh
 ```
