@@ -59,6 +59,7 @@ PROTECTEDMODE:
   call PRINTMESSAGE
   add esp, 12
 
+  ; Jump to C language kernel. (01.Kernel32/Source/Main.c)
   jmp dword 0x08: 0X10200
 
 ; Print message to screen.
