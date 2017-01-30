@@ -13,6 +13,20 @@ START:
   mov ds, ax
   mov es, ax
 
+  ; Enable A20 GATE by using BIOS service.
+  mov ax, 0x2401
+  int 0x15
+  jc .A20GATEERROR
+  jmp .A20GATESUCCESS
+
+.A20GATEERROR:
+  ; Enabling A20 GATE failed. Try again by using system control port.
+  in al, 0x92
+  or al, 0x02
+  and al, 0xFE
+  out 0x92, al
+
+.A20GATESUCCESS:
   cli                 ; Disable interrupts
   lgdt [ GDTR ]       ; Load GDT
   
@@ -21,7 +35,7 @@ START:
   mov eax, 0x4000003B
   mov cr0, eax
 
-  ; Jump to protected mode entry.
+  ; Jump to protected mode entry point.
   jmp dword 0x08: ( PROTECTEDMODE - $$ + 0x10000 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,7 +59,7 @@ PROTECTEDMODE:
   call PRINTMESSAGE
   add esp, 12
 
-  jmp $ ; TODO: Infinite loop, Not Implemented yet.
+  jmp dword 0x08: 0X10200
 
 ; Print message to screen.
 ; PARAM: X axis, Y axis, STRING
