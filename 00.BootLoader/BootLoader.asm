@@ -7,20 +7,25 @@ jmp 0x07C0:START
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; MINT64 OS Environment Variables
+; - Sector counts will automatically adjusted by ImageMaker utility.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-TOTALSECTORCOUNT: dw 2
+TOTALSECTORCOUNT:     dw 0x02 ; # of sectors except BootLoader
+                              ; Address: 0x7C05
+
+KERNEL32SECTORCOUNT:  dw 0x02 ; # of protected mode kernel sectors
+                              ; Address: 0x7C07
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; BootLoader Code Section
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 START:
-  ; Initialize segments
-  mov ax, 0x07C0
+  ; Initialize Real Mode segments
+  mov ax, 0x07C0 ; BootLoader start address (0x7C00)
   mov ds, ax
-  mov ax, 0xB800 ; Video memory base address
+  mov ax, 0xB800 ; Video memory base address (0xB8000)
   mov es, ax
 
-  ; Stack segment, 0x0000 ~ 0xFFFF (64KB)
+  ; Initialize stack segment, 0x0000 ~ 0xFFFF (64KB)
   mov ax, 0x0000
   mov ss, ax
   mov sp, 0xFFFE
