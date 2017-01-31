@@ -35,15 +35,16 @@ START:
   mov eax, 0x4000003B
   mov cr0, eax
 
-  ; Jump to protected mode entry point.
-  jmp dword 0x08: ( PROTECTEDMODE - $$ + 0x10000 )
+  ; Jump to Protected Mode Entry Point.
+  jmp dword 0x18: ( PROTECTEDMODE - $$ + 0x10000 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 32-Bit Protected Mode Entry Point
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 [BITS 32]
 PROTECTEDMODE:
-  mov ax, 0x10 ; Initialize segments (DS, ES, FS, GS, SS)
+  ; Initialize Protected Mode segments (DS, ES, FS, GS, SS)
+  mov ax, 0x20
   mov ds, ax
   mov es, ax
   mov fs, ax
@@ -59,8 +60,8 @@ PROTECTEDMODE:
   call PRINTMESSAGE
   add esp, 12
 
-  ; Jump to C language kernel. (01.Kernel32/Source/Main.c)
-  jmp dword 0x08: 0X10200
+  ; Jump to Protected Mode C Language Kernel. (01.Kernel32/Source/Main.c)
+  jmp dword 0x18: 0X10200
 
 ; Print message to screen.
 ; PARAM: X axis, Y axis, STRING
@@ -125,6 +126,24 @@ GDT:
     db 0x00
     db 0x00
 
+  ; CODE and DATA segment descriptors for 64bit IA-32e Mode
+  IA_32eCODEDESCRIPTOR:
+    dw 0xFFFF ; Limit [15:0]
+    dw 0x0000 ; Base [15:0]
+    db 0x00   ; Base [23:16]
+    db 0x9A   ; P=1, DPL=0, Code Segment, Execute/Read
+    db 0xAF   ; G=1, D=0, L=1, Limit[19:16]
+    db 0x00   ; Base [31:24]
+
+  IA_32eDATADESCRIPTOR:
+    dw 0xFFFF ; Limit [15:0]
+    dw 0x0000 ; Base [15:0]
+    db 0x00   ; Base [23:16]
+    db 0x92   ; P=1, DPL=0, Data Segment, Read/Write
+    db 0xAF   ; G=1, D=0, L=1, Limit[19:16]
+    db 0x00   ; Base [31:24]
+
+  ; CODE and DATA segment descriptors for 32bit Protected Mode
   CODEDESCRIPTOR:
     dw 0xFFFF ; Limit [15:0]
     dw 0x0000 ; Base [15:0]
@@ -142,7 +161,7 @@ GDT:
     db 0x00   ; Base [31:24]
 GDTEND:
 
-SWITCHSUCCESSMESSAGE: db 'Switch To Protected Mode Success.', 0
+SWITCHSUCCESSMESSAGE: db 'Switch To Protected Mode....................[PASS]', 0
 PROTECTEDMODEBASE: equ 0x10000
 
 times 512 - ( $ - $$ ) db 0x00
