@@ -1,5 +1,5 @@
 # MINT64-OS
-![MINT64-OS](https://cloud.githubusercontent.com/assets/8179234/22420590/7dc3e1c8-e726-11e6-9224-6272fccadafe.png)    
+![MINT64-OS](https://cloud.githubusercontent.com/assets/8179234/22451262/4a1a7974-e7b0-11e6-91c1-69b2954f984f.png)    
 
 Clone of [MINT64 OS](https://github.com/kkamagui/mint64os) for personal study.  
 MINT64 OS is a project that making own 64bit multicore operating system.  
@@ -32,7 +32,7 @@ make
 - [x] 7. C언어로 커널 작성하기
 - [x] 8. A20 게이트를 활성화하여 1MB이상 영역에 접근해보자
 - [x] 9. 페이징 기능을 활성화하여 64비트 전환을 준비하자
-- [ ] 10. 64비트 모드로 전환하자
+- [x] 10. 64비트 모드로 전환하자
 - [ ] 11. 키보드 디바이스 드라이버를 추가하자
 - [ ] 12. GDT와 IDT 테이블, TSS 세그먼트를 추가하여 인터럽트를 대비하자
 - [ ] 13. PIC 컨트롤러와 인터럽트 핸들러를 이용해 인터럽트를 처리하자
