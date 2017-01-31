@@ -21,9 +21,7 @@ $(OBJECTDIRECTORY)/EntryPoint.bin: $(SOURCEDIRECTORY)/EntryPoint.s
 	$(NASM32) -o $@ $<
 
 dep:
-	@echo === Make Dependency File ===
 	make -C $(OBJECTDIRECTORY) -f ../makefile InternalDependency
-	@echo === Dependency Search Complete ===
 
 ExecuteInternalBuild: dep
 	make -C $(OBJECTDIRECTORY) -f ../makefile Kernel32.elf
@@ -45,7 +43,7 @@ CENTRYPOINTOBJECTFILE = Main.o
 CSOURCEFILES = $(wildcard ../$(SOURCEDIRECTORY)/*.c)
 ASSEMBLYSOURCEFILES = $(wildcard ../$(SOURCEDIRECTORY)/*.asm)
 COBJECTFILES = $(subst Main.o, , $(notdir $(patsubst %.c,%.o,$(CSOURCEFILES))))
-ASSEMBLYOBJECTFILES = $(notdir $(patsubst %.asm,$.o,$(ASSEMBLYSOURCEFILES)))
+ASSEMBLYOBJECTFILES = $(notdir $(patsubst %.asm,%.o,$(ASSEMBLYSOURCEFILES)))
 
 %.o: ../$(SOURCEDIRECTORY)/%.c
 		$(GCC32) -c $<
