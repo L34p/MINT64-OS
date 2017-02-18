@@ -1,7 +1,7 @@
 #include "Types.h"
 #include "Keyboard.h"
-
-static void kPrintString(int iX, int iY, const char* pcString);
+#include "Descriptor.h"
+#include "Utility.h"
 
 /* 
  * 64-bit protected mode C Language kernel entry point.
@@ -16,22 +16,36 @@ void Main(void)
 
   kPrintString(0, 10, "Switch To IA-32e Mode.......................[PASS]");
   kPrintString(0, 11, "IA-32e C Language Kernel Start..............[PASS]");
-  kPrintString(0, 12, "Activate Keyboard...........................[    ]");
 
+  kPrintString(0, 12, "GDT Initialize And Switch For IA-32e Mode...[    ]");
+  kInitializeGDTTableAndTSS();
+  kLoadGDTR(GDTR_STARTADDRESS);
+  kPrintString(45, 12, "PASS");
+
+  kPrintString(0, 13, "TSS Segment Load............................[    ]");
+  kLoadTR(GDT_TSSSEGMENT);
+  kPrintString(45, 13, "PASS");
+
+  kPrintString(0, 14, "IDT Initialize..............................[    ]");
+  kInitializeIDTTables();
+  kLoadIDTR(IDTR_STARTADDRESS);
+  kPrintString(45, 14, "PASS");
+
+  kPrintString(0, 15, "Activate Keyboard...........................[    ]");
   if(kActivateKeyboard() == TRUE)
   {
-    kPrintString(45, 12, "PASS");
+    kPrintString(45, 15, "PASS");
   }
   else
   {
-    kPrintString(45, 12, "FAIL");
+    kPrintString(45, 15, "FAIL");
     while(1);
   }
 
   /* Simple echo shell to test keyboard driver. */
-  kPrintString(0, 14, "MINT64-OS ~$ ");
+  kPrintString(0, 17, "MINT64-OS ~$ ");
   x = 13;
-  y = 14;
+  y = 17;
   while(1)
   {
     if(kIsOutputBufferFull() == TRUE)
@@ -58,21 +72,14 @@ void Main(void)
         if((bFlags & KEY_FLAGS_DOWN) &&
            (kIsPrintableScanCode(bTemp) == TRUE))
           kPrintString(x++, y, vcTemp);
+
+        /* Trigger Divide By Zero exception to test interrupt handler. */
+        if(vcTemp[0] == '0')
+        {
+          bTemp = bTemp / 0;
+        }
       }
     }
   }
 
-}
-
-/* 
- * Print string on the screen at (X, Y)
- */
-static void kPrintString( int iX, int iY, const char* pcString)
-{
-  CHARACTER* pstScreen = (CHARACTER*) 0xB8000;
-  int i;
-
-  pstScreen += (iY * 80) + iX;
-  for (i=0; pcString[i] != 0; ++i)
-    pstScreen[i].bCharacter = pcString[i];
 }

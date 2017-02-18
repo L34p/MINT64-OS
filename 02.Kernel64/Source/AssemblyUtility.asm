@@ -3,7 +3,7 @@
 SECTION .text
 
 ; Export assembly functions to use in C files.
-global kInPortByte, kOutPortByte
+global kInPortByte, kOutPortByte, kLoadGDTR, kLoadTR, kLoadIDTR
 
 ; Read single byte from the given port.
 ; PARAM: port number 
@@ -29,4 +29,22 @@ kOutPortByte:
 
   pop rax
   pop rdx
+  ret
+
+; Load GDTR
+; PARAM: GDT struct address
+kLoadGDTR:
+  lgdt [rdi]
+  ret
+
+; Load TR
+; PARAM: TSS Segment descriptor offset
+kLoadTR:
+  ltr di
+  ret
+
+; Load IDTR
+; PARAM: IDT struct address
+kLoadIDTR:
+  lidt [rdi]
   ret
